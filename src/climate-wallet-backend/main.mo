@@ -42,8 +42,8 @@ actor LoyaltyGame {
   stable var playerDataStable : [(Principal, GameData)] = [];
   stable var weeklyPlayerDataStable : [(Principal, GameData)] = [];
 
-  var playerData = HashMap.HashMap<Principal, GameData>(INITIAL_CAPACITY, Principal.equal, Principal.hash);
-  var weeklyPlayerData = HashMap.HashMap<Principal, GameData>(INITIAL_CAPACITY, Principal.equal, Principal.hash);
+  transient var playerData = HashMap.HashMap<Principal, GameData>(INITIAL_CAPACITY, Principal.equal, Principal.hash);
+  transient var weeklyPlayerData = HashMap.HashMap<Principal, GameData>(INITIAL_CAPACITY, Principal.equal, Principal.hash);
 
   // ========== SYSTEM METHODS ==========
   system func preupgrade() {
