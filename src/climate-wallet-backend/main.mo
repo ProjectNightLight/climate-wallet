@@ -19,7 +19,7 @@ import Nat8 "mo:base/Nat8";
 import Array "mo:base/Array";
 
 
-actor LoyaltyGame {
+persistent actor LoyaltyGame {
   //=========== DISTRUBUTION TIME ==========
   stable var isWeeklyCompetitionRunning : Bool = false;
   stable var lastRewardedSundayId : Nat = 0;
@@ -34,16 +34,16 @@ actor LoyaltyGame {
   type GameDataWithPrincipal = {principal : Principal; data : GameDataShared;};
 
   // ========== CONSTANTS ==========
-  let INITIAL_CAPACITY = 16;
-  let EMPTY_RANK : PRank = {name=""; isMale=true; rank=0; score=0; playerAddress=""; rewarded = false; weeklyRank = 0};
+  transient let INITIAL_CAPACITY = 16;
+  transient let EMPTY_RANK : PRank = {name=""; isMale=true; rank=0; score=0; playerAddress=""; rewarded = false; weeklyRank = 0};
 
   // ========== PLAYER DATA STORAGE ==========
   // Player data storage
   stable var playerDataStable : [(Principal, GameData)] = [];
   stable var weeklyPlayerDataStable : [(Principal, GameData)] = [];
 
-  var playerData = HashMap.HashMap<Principal, GameData>(INITIAL_CAPACITY, Principal.equal, Principal.hash);
-  var weeklyPlayerData = HashMap.HashMap<Principal, GameData>(INITIAL_CAPACITY, Principal.equal, Principal.hash);
+  transient var playerData = HashMap.HashMap<Principal, GameData>(INITIAL_CAPACITY, Principal.equal, Principal.hash);
+  transient var weeklyPlayerData = HashMap.HashMap<Principal, GameData>(INITIAL_CAPACITY, Principal.equal, Principal.hash);
 
   // ========== SYSTEM METHODS ==========
   system func preupgrade() {
@@ -485,7 +485,7 @@ actor LoyaltyGame {
   };
 
   // ========== LEDGER INTERACTION ==========
-  let ledger : actor {
+  transient let ledger : actor {
     icrc1_transfer: shared {
       from_subaccount: ?Blob;
       to: {
